@@ -6,5 +6,5 @@ app.get("/", (res,req) => {
 });
 
 app.listen(process.env.PORT || 5000, () => {
-    console.log("Listening to 5000 and process env port");
+    console.log("Listening to 5000 Heroku");
 })
