@@ -2,11 +2,10 @@
   "name": "eat-a-loot",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon -L index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon -L index.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +19,9 @@
   "homepage": "https://github.com/GeorgeApos/Eat-A-Loot#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mongodb": "^4.2.0",
-    "mongoose": "^6.0.14"
+    "npm": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
