@@ -9,53 +9,26 @@ const internal = require('stream');
 const { errorMonitor } = require('events');
 
 require('dotenv/config')
-
 const api = process.env.API_URL
 
-//middleware
+
+//routes
+const customerRouter = require('./routers/customers');
+const foodRouter = require('./routers/foods');
+const institutionRouter = require('./routers/institutions');
+const operatorRouter = require('./routers/operators');
+const orderRouter = require('./routers/orders');
+
+//middlewares
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
 
-
-const foodSchema = mongoose.Schema({
-  codeId: Number,
-  name: String,
-  foodDescreption: String,
-  qntInStock: Number,
-  buyPrice: Number
-})
-
-const Food = mongoose.model('Food', foodSchema);
-
-// http://localhost:3000/api/v1/foods
-app.get(`${api}/foods`, (req,res) => {
-  const food = {
-    id: 1,
-    name: 'burger',
-    image: 'some_url',
-  }
-  res.send(food);
-});
-
-app.post(`${api}/foods`, (req,res) =>{
-  const food = new Food({
-    codeId: req.body.codeId,
-    name : req.body.name,
-    foodDescreption: req.body.foodDescreption,
-    qntInStock: req.body.qntInStock,
-    buyPrice: req.body.buyPrice
-  })
-
-  food.save().then(createdProduct=> {
-    res.status(201).json(createdProduct)
-  }).catch((err) => {
-    res.status(500).json({
-      error: err,
-      success: false
-    })
-  })
-  res.send(food);
-});
+//routers
+app.use(`${api}/customers`, customerRouter)
+app.use(`${api}/foods`, foodRouter)
+app.use(`${api}/institutions`, institutionRouter)
+app.use(`${api}/operators`, operatorRouter)
+app.use(`${api}/orders`, orderRouter)
 
 //database
 mongoose.connect(process.env.CONNECTION_STRING, {
@@ -70,6 +43,7 @@ mongoose.connect(process.env.CONNECTION_STRING, {
   console.log(err);
 })
 
+//port:3000
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
