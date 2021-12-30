@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const operatorSchema = mongoose.Schema({
     codeId: Number,
     name: String,
-    adress: String,
+    address: String,
     email: String,
     telephone: String,
     category: String

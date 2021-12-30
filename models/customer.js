@@ -5,7 +5,7 @@ const customerSchema = mongoose.Schema({
     fname: String,
     lname: String,
     phone: String,
-    adress: String,
+    address: String,
     city: String,
     postalCode: String,
   })

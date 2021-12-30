@@ -17,9 +17,9 @@ router.post(`/`, (req,res) =>{
         fname: req.body.String,
         lname: req.body.String,
         phone: req.body.String,
-        adress: req.body.String,
+        address: req.body.String,
         city: req.body.String,
-        postalCode: req.body.String,
+        postalCode: req.body.String
 })
   
 customer.save().then((createdCustomer=> {

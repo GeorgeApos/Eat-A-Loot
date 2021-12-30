@@ -15,7 +15,7 @@ router.post(`/`, (req,res) =>{
     const operator = new Operator({
         codeId: req.body.Number,
         name: req.body.String,
-        adress: req.body.String,
+        address: req.body.String,
         email: req.body.String,
         telephone: req.body.String
 })
