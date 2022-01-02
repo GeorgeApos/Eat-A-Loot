@@ -7,10 +7,16 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const internal = require('stream');
 const { errorMonitor } = require('events');
-
+const cors = require('cors');
 require('dotenv/config')
 const api = process.env.API_URL
 
+app.use(cors());
+app.options('*', cors())
+
+//middlewares
+app.use(bodyParser.json());
+app.use(morgan('tiny'));
 
 //routes
 const customerRouter = require('./routers/customers');
@@ -18,10 +24,6 @@ const foodRouter = require('./routers/foods');
 const institutionRouter = require('./routers/institutions');
 const operatorRouter = require('./routers/operators');
 const orderRouter = require('./routers/orders');
-
-//middlewares
-app.use(bodyParser.json());
-app.use(morgan('tiny'));
 
 //routers
 app.use(`${api}/customers`, customerRouter)
@@ -45,5 +47,5 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 
 //port:3000
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Eat-A-Loot Application is listening at http://localhost:${port}`)
 })

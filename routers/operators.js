@@ -11,7 +11,7 @@ router.get(`/`, async(req,res) =>{
     res.send(operatorList);
 })
 
-router.post(`/`, (req,res) =>{
+/* router.post(`/`, (req,res) =>{
     const operator = new Operator({
         codeId: req.body.Number,
         name: req.body.String,
@@ -29,6 +29,6 @@ operator.save().then((createdOperator=> {
     })
 })
     res.send(operator);
-});
+}); */
   
 module.exports = router;

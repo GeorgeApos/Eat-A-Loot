@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const foodSchema = mongoose.Schema({
     codeId: Number,
     name: String,
-    foodDescreption: String,
+    foodDescription: String,
     qntInStock: Number,
     buyPrice: Number
   })
