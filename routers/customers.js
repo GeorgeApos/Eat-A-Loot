@@ -27,6 +27,8 @@ router.post('/', async(req,res)=> {
         codeId: req.body.codeId,
         fname: req.body.fname,
         lname: req.body.lname,
+        email: req.body.email,
+        password: req.body.password,
         phone: req.body.phone,
         address: req.body.address,
         city: req.body.city,
