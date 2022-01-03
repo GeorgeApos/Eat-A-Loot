@@ -49,3 +49,4 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 app.listen(port, () => {
   console.log(`Eat-A-Loot Application is listening at http://localhost:${port}`)
 })
+
