@@ -1,5 +1,6 @@
 const {Food} = require('../models/food');
 const express = require('express');
+const { mongoose } = require('mongoose');
 const router = express.Router();
   
 router.get(`/`, async(req,res) =>{
@@ -31,16 +32,20 @@ router.post(`/`,async (req,res) =>{
       buyPrice: req.body.buyPrice
     })
 
-    food = await food.save();
+    food.save().then((createdFood=> {
+        res.status(201).json(createdFood)
+    })).catch((err) => {
+      res.status(500).json({
+          error: err,
+          success: false
+      })
+    })
 
-    if(!food){
-        return res.status(500).send('The food cannot be created!')
-    }
-
-    res.send(food)
+    res.send(food);
 })
   
 router.put('/:id', async (req,res) =>{
+
     const food = await food.findByIdAndUpdate(
         req.params.id,
         {
@@ -62,7 +67,7 @@ router.put('/:id', async (req,res) =>{
     res.send(food);
 })
 
-router.delete('/:id', (req,res) =>{
+router.delete('/:id', (req,res) => {
     Food.findByIdAndRemove(req.params.id).then(food =>{
         if(food){
             return res.status(200).json({
@@ -81,6 +86,20 @@ router.delete('/:id', (req,res) =>{
             error: err
         })
     })
+})
+
+router.get(`/get/count`, async(req,res) =>{
+    const foodCount = await Food.countDocuments()
+
+    if(!foodCount) {
+        res.status(500).json({
+            success : false
+        })
+    }
+    res.send({
+        foodCount : foodCount
+    })
+    res.status(200).send(foodCount);
 })
 
 module.exports = router;

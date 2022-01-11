@@ -48,15 +48,15 @@ router.put('/:id', async (req,res) =>{
     const customer = await Customer.findByIdAndUpdate(
         req.params.id,
         {
-            codeId: req.body.codeId,
-            fname: req.body.fname,
-            lname: req.body.lname,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
             email: req.body.email,
-            password: req.body.password,
+            passwordHash: req.body.passwordHash,
             phone: req.body.phone,
             address: req.body.address,
             city: req.body.city,
-            postalCode: req.body.postalCode
+            postalCode: req.body.postalCode,
+            isAdmin: req.body.isAdmin
         },
         { 
             new: true 
@@ -89,6 +89,28 @@ router.delete('/:id', (req,res) =>{
             error: err
         })
     })
+})
+
+router.post('/', async(req,res)=> {
+    let customer = new Customer({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        passwordHash: req.body.passwordHash,
+        phone: req.body.phone,
+        address: req.body.address,
+        city: req.body.city,
+        postalCode: req.body.postalCode,
+        isAdmin: req.body.isAdmin
+    })
+
+    customer = await customer.save();
+
+    if(!customer){
+        return res.status(404).send('The Customer cannot be created!')
+    }
+
+    res.send(customer);
 })
 
 module.exports = router;

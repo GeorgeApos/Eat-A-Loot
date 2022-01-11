@@ -11,9 +11,8 @@ router.get(`/`, async(req,res) =>{
     res.send(institutionList);
 })
 
-/* router.post(`/`, (req,res) =>{
+router.post(`/`, (req,res) =>{
     const institution = new Institution({
-        codeId: req.body.Number,
         name: req.body.String,
         address: req.body.String,
         email: req.body.String,
@@ -29,6 +28,6 @@ institution.save().then((createdInstitution=> {
     })
 })
     res.send(institution);
-}); */
+});
   
 module.exports = router;
