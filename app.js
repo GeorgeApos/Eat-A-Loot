@@ -11,6 +11,8 @@ const cors = require('cors');
 require('dotenv/config')
 const api = process.env.API_URL
 
+//testing opensuse
+
 app.use(cors());
 app.options('*', cors())
 
