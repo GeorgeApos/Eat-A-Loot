@@ -95,13 +95,13 @@ router.delete('/:id', (req,res) =>{
 })
 
 router.post('/login', async(res,req) => {
-    const user = await User.findOne({email: req.body.email})
+    const Customer = await Customer.findOne({email: req.body.email})
 
-    if(!user){
-        return response.status(400).send('User not found')
+    if(!Customer){
+        return response.status(400).send('Customer not found')
     }
 
-    return res.status(200).send(user);
+    return res.status(200).send(Customer);
 })
 
 module.exports = router;

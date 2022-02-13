@@ -25,7 +25,6 @@ router.get(`/:id`, async(req,res) =>{
 
 router.post(`/`,async (req,res) =>{
     const food = new Food({
-      codeId: req.body.codeId,
       name : req.body.name,
       foodDescription: req.body.foodDescreption,
       qntInStock: req.body.qntInStock,

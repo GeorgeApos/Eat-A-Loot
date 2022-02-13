@@ -7,12 +7,5 @@ const foodSchema = mongoose.Schema({
     buyPrice: Number
 })
 
-foodSchema.virtual('id').get(function() {
-  return this._id.toHexString();
-})
-
-foodSchema.set('toJSON', {
-  virtuals: true,
-});
 
 exports.Food = mongoose.model('Food', foodSchema);
