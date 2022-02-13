@@ -1,6 +1,9 @@
 const {Customer} = require('../models/customer');
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
+const { response } = require('express');
+
   
 router.get(`/`, async(req,res) =>{
     const customerList = await Customer.find();
@@ -28,7 +31,7 @@ router.post('/', async(req,res)=> {
         fname: req.body.fname,
         lname: req.body.lname,
         email: req.body.email,
-        password: req.body.password,
+        passwordHash: bcrypt.hashSync(req.body.passwordHash, 10),
         phone: req.body.phone,
         address: req.body.address,
         city: req.body.city,
@@ -91,26 +94,14 @@ router.delete('/:id', (req,res) =>{
     })
 })
 
-router.post('/', async(req,res)=> {
-    let customer = new Customer({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        passwordHash: req.body.passwordHash,
-        phone: req.body.phone,
-        address: req.body.address,
-        city: req.body.city,
-        postalCode: req.body.postalCode,
-        isAdmin: req.body.isAdmin
-    })
+router.post('/login', async(res,req) => {
+    const user = await User.findOne({email: req.body.email})
 
-    customer = await customer.save();
-
-    if(!customer){
-        return res.status(404).send('The Customer cannot be created!')
+    if(!user){
+        return response.status(400).send('User not found')
     }
 
-    res.send(customer);
+    return res.status(200).send(user);
 })
 
 module.exports = router;
