@@ -98,7 +98,7 @@ router.delete('/:id', (req,res) =>{
 //backend login
 router.post('/login', async(req,res) => {
     const customer = await Customer.findOne({email: req.body.email})
-
+    const secret = process.env.secret;
     if(!customer){
         return res.status(400).send('Customer not found')
     }
@@ -108,7 +108,8 @@ router.post('/login', async(req,res) => {
             {
                 customerId: customer.id
             },
-            'secret'
+            secret,
+            {expiresIn : '1d'}
         )
 
         res.status(200).send({customer: customer.email, token: token});

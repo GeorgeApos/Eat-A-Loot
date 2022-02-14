@@ -10,8 +10,8 @@ const { errorMonitor } = require('events');
 const cors = require('cors');
 require('dotenv/config')
 const api = process.env.API_URL
-
-
+const authJwt = require('./helpers/jwt');
+const errorHandler = require('./helpers/error-handler');
 
 app.use(cors());
 app.options('*', cors())
@@ -19,6 +19,8 @@ app.options('*', cors())
 //middlewares
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
+app.use(authJwt());
+app.use(errorHandler);
 
 //routes
 const customerRouter = require('./routers/customers');
@@ -26,6 +28,7 @@ const foodRouter = require('./routers/foods');
 const institutionRouter = require('./routers/institutions');
 const operatorRouter = require('./routers/operators');
 const orderRouter = require('./routers/orders');
+
 
 //routers
 app.use(`${api}/customers`, customerRouter)
