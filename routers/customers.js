@@ -2,11 +2,12 @@ const {Customer} = require('../models/customer');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { response } = require('express');
 
   
 router.get(`/`, async(req,res) =>{
-    const customerList = await Customer.find();
+    const customerList = await Customer.find().select('-passwordHash');
   
     if(!customerList) {
       res.status(500).json({success: false})
@@ -15,7 +16,7 @@ router.get(`/`, async(req,res) =>{
 })
 
 router.get('/:id', async(req,res)=> {
-    const customer = await Customer.findById(req.params.id);
+    const customer = await Customer.findById(req.params.id).select('-passwordHash');
 
     if(!customer) {
         res.status(500).json({
@@ -31,7 +32,7 @@ router.post('/', async(req,res)=> {
         fname: req.body.fname,
         lname: req.body.lname,
         email: req.body.email,
-        passwordHash: bcrypt.hashSync(req.body.passwordHash, 10),
+        passwordHash: bcrypt.hashSync(req.body.password, 10),
         phone: req.body.phone,
         address: req.body.address,
         city: req.body.city,
@@ -54,7 +55,7 @@ router.put('/:id', async (req,res) =>{
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
-            passwordHash: req.body.passwordHash,
+            password: req.body.password,
             phone: req.body.phone,
             address: req.body.address,
             city: req.body.city,
@@ -94,14 +95,26 @@ router.delete('/:id', (req,res) =>{
     })
 })
 
-router.post('/login', async(res,req) => {
-    const Customer = await Customer.findOne({email: req.body.email})
+//backend login
+router.post('/login', async(req,res) => {
+    const customer = await Customer.findOne({email: req.body.email})
 
-    if(!Customer){
-        return response.status(400).send('Customer not found')
+    if(!customer){
+        return res.status(400).send('Customer not found')
     }
 
-    return res.status(200).send(Customer);
+    if(user && bcrypt.compareSync(req.body.password, req.body.passwordHash)){
+        const token = jwt.sign(
+            {
+                customerId: customer.id
+            },
+            'secret'
+        )
+
+        res.status(200).send({customer: customer.email, token: token});
+    }else{
+        return res.status(200).send(customer);
+    }
 })
 
 module.exports = router;
