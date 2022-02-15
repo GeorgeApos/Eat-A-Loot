@@ -43,12 +43,12 @@ mongoose.connect(process.env.CONNECTION_STRING, {
   useUnifiedTopology: true,
   dbName: 'eat-a-loot-db'
 })
-.then(() => {
-  console.log('Database connection is ready...');
-})
-.catch((err)=> {
-  console.log(err);
-})
+  .then(() => {
+    console.log('Database connection is ready...');
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 
 //port:3000
 app.listen(port, () => {

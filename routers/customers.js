@@ -1,24 +1,24 @@
-const {Customer} = require('../models/customer');
+const { Customer } = require('../models/customer');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { response } = require('express');
 
-  
-router.get(`/`, async(req,res) =>{
+
+router.get(`/`, async (req, res) => {
     const customerList = await Customer.find().select('-passwordHash');
-  
-    if(!customerList) {
-      res.status(500).json({success: false})
+
+    if (!customerList) {
+        res.status(500).json({ success: false })
     }
     res.status(200).send(customerList);
 })
 
-router.get('/:id', async(req,res)=> {
+router.get('/:id', async (req, res) => {
     const customer = await Customer.findById(req.params.id).select('-passwordHash');
 
-    if(!customer) {
+    if (!customer) {
         res.status(500).json({
             message: 'The customer with the given ID was not found'
         })
@@ -26,7 +26,7 @@ router.get('/:id', async(req,res)=> {
     res.status(200).send(customer);
 })
 
-router.post('/', async(req,res)=> {
+router.post('/', async (req, res) => {
     let customer = new Customer({
         codeId: req.body.codeId,
         fname: req.body.fname,
@@ -41,14 +41,14 @@ router.post('/', async(req,res)=> {
 
     customer = await customer.save();
 
-    if(!customer){
+    if (!customer) {
         return res.status(404).send('The Customer cannot be created!')
     }
 
     res.send(customer);
 })
-  
-router.put('/:id', async (req,res) =>{
+
+router.put('/:id', async (req, res) => {
     const customer = await Customer.findByIdAndUpdate(
         req.params.id,
         {
@@ -62,21 +62,21 @@ router.put('/:id', async (req,res) =>{
             postalCode: req.body.postalCode,
             isAdmin: req.body.isAdmin
         },
-        { 
-            new: true 
+        {
+            new: true
         }
     )
 
-    if(!customer){
+    if (!customer) {
         return res.status(404).send('The Customer cannot be updated!')
     }
 
     res.send(customer);
 })
 
-router.delete('/:id', (req,res) =>{
-    Customer.findByIdAndRemove(req.params.id).then(customer =>{
-        if(customer){
+router.delete('/:id', (req, res) => {
+    Customer.findByIdAndRemove(req.params.id).then(customer => {
+        if (customer) {
             return res.status(200).json({
                 success: true,
                 message: 'The Customer is Deleted!'
@@ -87,7 +87,7 @@ router.delete('/:id', (req,res) =>{
                 message: 'Customer not found'
             })
         }
-    }).catch(err =>{
+    }).catch(err => {
         return res.status(400).json({
             success: false,
             error: err
@@ -96,32 +96,32 @@ router.delete('/:id', (req,res) =>{
 })
 
 //backend login
-router.post('/login', async(req,res) => {
-    const customer = await Customer.findOne({email: req.body.email})
+router.post('/login', async (req, res) => {
+    const customer = await Customer.findOne({ email: req.body.email })
     const secret = process.env.secret;
-    if(!customer){
+    if (!customer) {
         return res.status(400).send('Customer not found')
     }
 
-    if(user && bcrypt.compareSync(req.body.password, req.body.passwordHash)){
+    if (user && bcrypt.compareSync(req.body.password, req.body.passwordHash)) {
         const token = jwt.sign(
             {
                 customerId: customer.id,
                 isAdmin: customer.isAdmin
             },
             secret,
-            {expiresIn : '1d'}
+            { expiresIn: '1d' }
         )
 
-        res.status(200).send({customer: customer.email, token: token});
-    }else{
+        res.status(200).send({ customer: customer.email, token: token });
+    } else {
         return res.status(200).send(customer);
     }
 })
 
 
 //backend register
-router.post('/register', async(req,res)=> {
+router.post('/register', async (req, res) => {
     let customer = new Customer({
         codeId: req.body.codeId,
         fname: req.body.fname,
@@ -136,30 +136,30 @@ router.post('/register', async(req,res)=> {
 
     customer = await customer.save();
 
-    if(!customer){
+    if (!customer) {
         return res.status(404).send('The Customer cannot be created!')
     }
 
     res.send(customer);
 })
 
-router.get(`/get/count`, async(req,res) =>{
+router.get(`/get/count`, async (req, res) => {
     const customerCount = await Customer.countDocuments()
 
-    if(!customerCount) {
+    if (!customerCount) {
         res.status(500).json({
-            success : false
+            success: false
         })
     }
     res.send({
-        customerCount : customerCount
+        customerCount: customerCount
     })
     res.status(200).send(customerCount);
 })
 
-router.delete('/:id', (req,res) => {
-     Customer.findByIdAndRemove(req.params.id).then(customer =>{
-        if(Customer){
+router.delete('/:id', (req, res) => {
+    Customer.findByIdAndRemove(req.params.id).then(customer => {
+        if (Customer) {
             return res.status(200).json({
                 success: true,
                 message: 'Customer is Deleted!'
@@ -170,7 +170,7 @@ router.delete('/:id', (req,res) => {
                 message: 'Customer not found'
             })
         }
-    }).catch(err =>{
+    }).catch(err => {
         return res.status(400).json({
             success: false,
             error: err
