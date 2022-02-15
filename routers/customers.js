@@ -106,7 +106,8 @@ router.post('/login', async(req,res) => {
     if(user && bcrypt.compareSync(req.body.password, req.body.passwordHash)){
         const token = jwt.sign(
             {
-                customerId: customer.id
+                customerId: customer.id,
+                isAdmin: customer.isAdmin
             },
             secret,
             {expiresIn : '1d'}
@@ -117,5 +118,65 @@ router.post('/login', async(req,res) => {
         return res.status(200).send(customer);
     }
 })
+
+
+//backend register
+router.post('/register', async(req,res)=> {
+    let customer = new Customer({
+        codeId: req.body.codeId,
+        fname: req.body.fname,
+        lname: req.body.lname,
+        email: req.body.email,
+        passwordHash: bcrypt.hashSync(req.body.password, 10),
+        phone: req.body.phone,
+        address: req.body.address,
+        city: req.body.city,
+        postalCode: req.body.postalCode
+    })
+
+    customer = await customer.save();
+
+    if(!customer){
+        return res.status(404).send('The Customer cannot be created!')
+    }
+
+    res.send(customer);
+})
+
+router.get(`/get/count`, async(req,res) =>{
+    const customerCount = await Customer.countDocuments()
+
+    if(!customerCount) {
+        res.status(500).json({
+            success : false
+        })
+    }
+    res.send({
+        customerCount : customerCount
+    })
+    res.status(200).send(customerCount);
+})
+
+router.delete('/:id', (req,res) => {
+     Customer.findByIdAndRemove(req.params.id).then(customer =>{
+        if(Customer){
+            return res.status(200).json({
+                success: true,
+                message: 'Customer is Deleted!'
+            })
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: 'Customer not found'
+            })
+        }
+    }).catch(err =>{
+        return res.status(400).json({
+            success: false,
+            error: err
+        })
+    })
+})
+
 
 module.exports = router;
