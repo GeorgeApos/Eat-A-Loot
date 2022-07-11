@@ -2,7 +2,7 @@
 
 <object data="https://github.com/GeorgeApos/Eat-A-Loot/blob/main/%CE%92usiness%20Plan%20%CE%95at%20a%20Loot%20.pdf" type="application/pdf" width="700px" height="700px">
     <embed src="http://yoursite.com/the.pdf">
-    <p>You can find the Business Plan of this project </p><a href="https://github.com/GeorgeApos/Eat-A-Loot/blob/main/%CE%92usiness%20Plan%20%CE%95at%20a%20Loot%20.pdf">here</a>.</p>
+    <p>You can find the Business Plan of this project <a href="https://github.com/GeorgeApos/Eat-A-Loot/blob/main/%CE%92usiness%20Plan%20%CE%95at%20a%20Loot%20.pdf">here</a>.</p>
     </embed>
 </object>
 
